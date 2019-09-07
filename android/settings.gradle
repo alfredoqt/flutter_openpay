@@ -1,0 +1,2 @@
+rootProject.name = 'flutter_openpay'
+include ':flutter_openpay', ':openpay-v2.0.3'
