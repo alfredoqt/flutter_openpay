@@ -1,5 +1,7 @@
 package com.alfredoqt.flutter_openpay;
 
+import android.app.Activity;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,15 +23,16 @@ import mx.openpay.android.model.Token;
  */
 public class FlutterOpenpayPlugin implements MethodCallHandler {
     public static final String TAG = FlutterOpenpayPlugin.class.getSimpleName();
-
     private static Map<Integer, String> mOpenpayErrorCodes = new HashMap<>();
+
+    private Activity mActivity;
 
     /**
      * Plugin registration.
      */
     public static void registerWith(Registrar registrar) {
         final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_openpay");
-        channel.setMethodCallHandler(new FlutterOpenpayPlugin());
+        channel.setMethodCallHandler(new FlutterOpenpayPlugin(registrar.activity()));
         mOpenpayErrorCodes.put(1000, "ERROR_INTERNAL_SERVER_ERROR");
         mOpenpayErrorCodes.put(1001, "ERROR_BAD_REQUEST");
         mOpenpayErrorCodes.put(1002, "ERROR_UNAUTHORIZED");
@@ -43,6 +46,7 @@ public class FlutterOpenpayPlugin implements MethodCallHandler {
         mOpenpayErrorCodes.put(2006, "ERROR_CVV2_MISSING");
         mOpenpayErrorCodes.put(2007, "ERROR_CARD_NUMBER_ONLY_SANDBOX");
         mOpenpayErrorCodes.put(2009, "ERROR_INVALID_CVV2");
+        mOpenpayErrorCodes.put(2011, "ERROR_CARD_PRODUCT_TYPE_NOT_SUPPORTED");
         mOpenpayErrorCodes.put(3001, "ERROR_CARD_DECLINED");
         mOpenpayErrorCodes.put(3002, "ERROR_CARD_EXPIRED");
         mOpenpayErrorCodes.put(3003, "ERROR_CARD_INSUFFICIENT_FUNDS");
@@ -54,10 +58,16 @@ public class FlutterOpenpayPlugin implements MethodCallHandler {
         mOpenpayErrorCodes.put(3011, "ERROR_CARD_RETAINED_BY_BANK");
     }
 
+    private FlutterOpenpayPlugin(Activity activity) {
+        this.mActivity = activity;
+    }
+
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         if (call.method.equals("tokenizeCard")) {
             handleTokenizeCard(call, result);
+        } else if (call.method.equals("getDeviceSessionId")) {
+            handleGetDeviceSessionId(call, result);
         } else {
             result.notImplemented();
         }
@@ -99,5 +109,22 @@ public class FlutterOpenpayPlugin implements MethodCallHandler {
                 result.success(operationResult.getResult().getId());
             }
         });
+    }
+
+    private void handleGetDeviceSessionId(MethodCall call, Result result) {
+        Map<String, Object> arguments = call.arguments();
+        String merchantId = (String) arguments.get("merchantId");
+        String publicApiKey = (String) arguments.get("publicApiKey");
+        boolean productionMode = (boolean) arguments.get("productionMode");
+
+        Openpay openpay = new Openpay(merchantId, publicApiKey, productionMode);
+
+        String deviceSessionId = openpay.getDeviceCollectorDefaultImpl().setup(this.mActivity);
+
+        if (deviceSessionId != null) {
+            result.success(deviceSessionId);
+            return;
+        }
+        result.error("ERROR_UNABLE_TO_GET_SESSION_ID", "The device session id could not be generated.", null);
     }
 }

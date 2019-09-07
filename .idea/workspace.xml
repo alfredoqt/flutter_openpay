@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="369be18a-c7c7-463b-b5d2-80201564290e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/android/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/openpay-v2.0.3/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/openpay-v2.0.3/openpay-v2.0.3.aar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/alfredoqt/flutter_openpay/FlutterOpenpayPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/alfredoqt/flutter_openpay/FlutterOpenpayPlugin.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -53,6 +51,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -70,7 +69,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="AndroidView" />
     </panes>
   </component>

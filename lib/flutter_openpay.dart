@@ -1,13 +1,76 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+// The entry point of the FlutterOpenpay SDK
 class FlutterOpenpay {
-  static const MethodChannel _channel =
-      const MethodChannel('flutter_openpay');
+  static const MethodChannel _channel = const MethodChannel('flutter_openpay');
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
+  /// Creates a token for a card which is ready
+  /// to process using Openpay API.
+  ///
+  /// Errors:
+  ///   • `ERROR_INTERNAL_SERVER_ERROR` - An error happened in the internal Openpay server.
+  ///   • `ERROR_BAD_REQUEST` - The request is not JSON valid format, the fields don’t have the correct format, or the request doesn’t have the required fields.
+  ///   • `ERROR_UNAUTHORIZED` - The request is not authenticated or is incorrect.
+  ///   • `ERROR_UNPROCESSABLE_ENTITY` - The operation couldn’t be processed because one or more parameters are incorrect.
+  ///   • `ERROR_SERVICE_UNAVAILABLE` - A required service is not available.
+  ///   • `ERROR_NOT_FOUND` - A required resource doesn’t exist.
+  ///   • `ERROR_REQUEST_ENTITY_TOO_LARGE` - The request body is too large.
+  ///   • `ERROR_PUBLIC_KEY_NOT_ALLOWED` - The public key is being used to make a request that requires the private key.
+  ///   • `ERROR_INVALID_CARD_NUMBER` - The identifier digit of this card number is invalid according to Luhn algorithm.
+  ///   • `ERROR_INVALID_EXP_DATE` - The card expiration date is prior to the current date.
+  ///   • `ERROR_CVV2_MISSING` - The card security code (CVV2) wasn’t provided.
+  ///   • `ERROR_CARD_NUMBER_ONLY_SANDBOX` - The card number is just for testing, it can only be used in Sandbox.
+  ///   • `ERROR_INVALID_CVV2` - The card security code (CVV2) is invalid.
+  ///   • `ERROR_CARD_PRODUCT_TYPE_NOT_SUPPORTED` - 	Card product type not supported.
+  ///   • `ERROR_CARD_DECLINED` - Card declined.
+  ///   • `ERROR_CARD_EXPIRED` - Card is expired.
+  ///   • `ERROR_CARD_INSUFFICIENT_FUNDS` - Card has not enough funds.
+  ///   • `ERROR_CARD_STOLEN` - Card has been flagged as stolen.
+  ///   • `ERROR_CARD_FRAUDULENT` - 	Card has been rejected by the antifraud system.
+  ///   • `ERROR_CARD_NOT_SUPPORTED_IN_ONLINE_TRANSACTIONS` - The card doesn’t support online transactions.
+  ///   • `ERROR_CARD_REPORTED_AS_LOST` - Card has been flagged as lost.
+  ///   • `ERROR_CARD_RESTRICTED_BY_BANK` - The card has been restricted by the bank.
+  ///   • `ERROR_CARD_RETAINED_BY_BANK` - The bank has requested to hold this card. Please contact the bank.
+  ///   • `ERROR_SERVICE_UNAVAILABLE` - The service is unavailable. Might be due to no internet connection.
+  static Future<String> tokenizeCard({
+    @required String merchantId,
+    @required String publicApiKey,
+    @required bool productionMode,
+    @required String cardholderName,
+    @required String cardNumber,
+    @required String cvv,
+    @required String expiryMonth,
+    @required String expiryYear,
+  }) {
+    return _channel.invokeMethod('tokenizeCard', <String, dynamic>{
+      'merchantId': merchantId,
+      'publicApiKey': publicApiKey,
+      'productionMode': productionMode,
+      'cardholderName': cardholderName,
+      'cardNumber': cardNumber,
+      'cvv': cvv,
+      'expiryMonth': expiryMonth,
+      'expiryYear': expiryYear,
+    });
+  }
+
+  /// Generates a device session id
+  /// to use in Openpay API calls.
+  ///
+  /// Errors:
+  ///   • `ERROR_UNABLE_TO_GET_SESSION_ID` - An error happened while generating the device session id.
+  static Future<String> getDeviceSessionId({
+    @required String merchantId,
+    @required String publicApiKey,
+    @required bool productionMode,
+  }) {
+    return _channel.invokeMethod('getDeviceSessionId', <String, dynamic>{
+      'merchantId': merchantId,
+      'publicApiKey': publicApiKey,
+      'productionMode': productionMode,
+    });
   }
 }
