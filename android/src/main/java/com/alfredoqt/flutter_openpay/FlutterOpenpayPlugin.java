@@ -10,13 +10,6 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
-import mx.openpay.android.Openpay;
-import mx.openpay.android.OperationCallBack;
-import mx.openpay.android.OperationResult;
-import mx.openpay.android.exceptions.OpenpayServiceException;
-import mx.openpay.android.exceptions.ServiceUnavailableException;
-import mx.openpay.android.model.Card;
-import mx.openpay.android.model.Token;
 
 /**
  * FlutterOpenpayPlugin

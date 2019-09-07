@@ -25,7 +25,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 16
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -37,6 +37,5 @@ android {
         api 'com.google.http-client:google-http-client-android:1.28.0'
         api 'com.google.http-client:google-http-client-jackson2:1.28.0'
         api 'com.fasterxml.jackson.core:jackson-core:2.9.8'
-        implementation project(':openpay-v2.0.3')
     }
 }
