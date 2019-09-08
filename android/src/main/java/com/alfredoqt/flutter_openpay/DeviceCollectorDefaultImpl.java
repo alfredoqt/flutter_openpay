@@ -2,9 +2,9 @@ package com.alfredoqt.flutter_openpay;
 
 import android.app.Activity;
 import android.util.Log;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import java.util.UUID;
 
 public class DeviceCollectorDefaultImpl {
@@ -12,9 +12,21 @@ public class DeviceCollectorDefaultImpl {
     private String merchantId;
     private String errorMessage;
 
-    public DeviceCollectorDefaultImpl(String baseUrl, String merchantId) {
+    public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
+    }
+
+    public void setMerchantId(String merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public void setProductionMode(boolean productionMode) {
+        if (productionMode) {
+            setBaseUrl("https://api.openpay.mx");
+            return;
+        } else {
+            setBaseUrl("https://sandbox-api.openpay.mx");
+        }
     }
 
     public String setup(Activity activity) {
@@ -45,7 +57,6 @@ public class DeviceCollectorDefaultImpl {
         } else {
             Log.e(tag, content);
         }
-
     }
 
     public String getErrorMessage() {

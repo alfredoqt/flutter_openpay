@@ -32,10 +32,12 @@ android {
         disable 'InvalidPackage'
     }
     dependencies {
-        api 'androidx.legacy:legacy-support-v13:1.0.0-alpha1'
-        api 'com.google.http-client:google-http-client:1.28.0'
-        api 'com.google.http-client:google-http-client-android:1.28.0'
-        api 'com.google.http-client:google-http-client-jackson2:1.28.0'
-        api 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+        api('com.squareup.retrofit2:retrofit:2.3.0')
+                {
+                    exclude module: 'okhttp'
+                }
+
+        api 'com.squareup.retrofit2:converter-gson:2.3.0'
+        api 'com.squareup.okhttp3:logging-interceptor:3.9.1'
     }
 }

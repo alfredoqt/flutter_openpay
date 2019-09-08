@@ -20,6 +20,7 @@ class _MyAppState extends State<MyApp> {
   String _expYear = "";
   String _cvc = "";
   String _token = "";
+  String _deviceSessionId = "";
 
   @override
   void initState() {
@@ -28,28 +29,22 @@ class _MyAppState extends State<MyApp> {
 
   String validateCardNameField(String value) {
     if (value.length == 0) {
-      return "Por favor escribe el nombre";
-    }
-    if (!(value.contains(new RegExp("^[^0-9]+\$")))) {
-      return "El nombre no puede incluír números";
+      return "Please write your name";
     }
     return null;
   }
 
   String validateCardNumberField(String value) {
-    if (value.length != 16) {
-      return "Se necesitan los 16 números";
-    }
     return null;
   }
 
   String validateExpMonthField(String value) {
     if (value.length != 2) {
-      return "Escribe el més en el formato MM";
+      return "Write like MM";
     }
 
     if (int.tryParse(value) < 1 || int.tryParse(value) > 12) {
-      return "$value no es un mes válido";
+      return "$value not valid";
     }
 
     //Validar de acuerdo a la fecha que resulta de mes y año
@@ -57,8 +52,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   String validateExpYearField(String value) {
-    if (value.length != 4) {
-      return "Escribe el año en el formato YYYY";
+    if (value.length != 2) {
+      return "Write like YY";
     }
 
     //Validar de acuerdo a la fecha que resulta de mes y año
@@ -67,7 +62,7 @@ class _MyAppState extends State<MyApp> {
 
   String validateBackNumberField(String value) {
     if (value.length != 3) {
-      return "Se necesitan los tres números detrás de tu tarjeta";
+      return "Three digits";
     }
     return null;
   }
@@ -100,6 +95,25 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  Future<void> requestDeviceSessionId() async {
+    String deviceSessionId;
+    try {
+      deviceSessionId = await FlutterOpenpay.getDeviceSessionId(
+        merchantId: 'mop7w9rqjzbkhcmwcoob',
+        productionMode: false,
+      );
+      setState(() {
+        _deviceSessionId = deviceSessionId;
+      });
+    } catch (e) {
+      print(e.toString());
+      deviceSessionId = "Unable to tokenize card";
+      setState(() {
+        _deviceSessionId = deviceSessionId;
+      });
+    }
+  }
+
   Widget cardNameField() {
     return Container(
       child: TextFormField(
@@ -107,7 +121,7 @@ class _MyAppState extends State<MyApp> {
         keyboardType: TextInputType.text,
         enabled: true,
         decoration: InputDecoration(
-            labelText: "Nombre del titular", border: OutlineInputBorder()),
+            labelText: "Holder name", border: OutlineInputBorder()),
         onSaved: (String value) {
           _name = value;
         },
@@ -123,7 +137,7 @@ class _MyAppState extends State<MyApp> {
         maxLength: 16,
         enabled: true,
         decoration: InputDecoration(
-            labelText: "Número de tarjeta", border: OutlineInputBorder()),
+            labelText: "Card number", border: OutlineInputBorder()),
         onSaved: (String value) {
           _number = value;
         },
@@ -153,11 +167,11 @@ class _MyAppState extends State<MyApp> {
     return Expanded(
       flex: 4,
       child: TextFormField(
-        maxLength: 4,
+        maxLength: 2,
         keyboardType: TextInputType.number,
         enabled: true,
         decoration:
-            InputDecoration(labelText: "YYYY", border: OutlineInputBorder()),
+            InputDecoration(labelText: "YY", border: OutlineInputBorder()),
         onSaved: (String value) {
           _expYear = value;
         },
@@ -174,7 +188,7 @@ class _MyAppState extends State<MyApp> {
         keyboardType: TextInputType.number,
         enabled: true,
         decoration:
-            InputDecoration(labelText: "CVC", border: OutlineInputBorder()),
+            InputDecoration(labelText: "CVV", border: OutlineInputBorder()),
         onSaved: (String value) {
           _cvc = value;
         },
@@ -201,13 +215,29 @@ class _MyAppState extends State<MyApp> {
       height: 48,
       child: new RaisedButton(
         child: new Text(
-          'Registrar tarjeta',
+          'Register card',
           style: new TextStyle(color: Colors.white),
         ),
         onPressed: () => this.submit(),
         color: Colors.blue,
       ),
-      margin: new EdgeInsets.only(top: 20.0),
+      margin: new EdgeInsets.only(top: 16.0),
+    );
+  }
+
+  Widget deviceSessionIdButton() {
+    return new Container(
+      width: 240,
+      height: 48,
+      child: new RaisedButton(
+        child: new Text(
+          'Get device session id',
+          style: new TextStyle(color: Colors.white),
+        ),
+        onPressed: requestDeviceSessionId,
+        color: Colors.blue,
+      ),
+      margin: new EdgeInsets.only(top: 16.0),
     );
   }
 
@@ -220,21 +250,27 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text("Conekta Tokenization Example"),
         ),
-        body: Container(
-          padding: EdgeInsets.all(20),
-          child: new Form(
-            key: _formKey,
-            child: new ListView(
-              children: <Widget>[
-                SizedBox(height: 20),
-                cardNameField(),
-                SizedBox(height: 20),
-                cardNumberField(),
-                cardValidationRow(),
-                tokenizeCardButton(),
-                SizedBox(height: 20),
-                Text("Token: $_token")
-              ],
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: new Form(
+              key: _formKey,
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  SizedBox(height: 16),
+                  cardNameField(),
+                  SizedBox(height: 16),
+                  cardNumberField(),
+                  cardValidationRow(),
+                  tokenizeCardButton(),
+                  SizedBox(height: 16),
+                  Text("Token: $_token"),
+                  deviceSessionIdButton(),
+                  SizedBox(height: 16),
+                  Text("Device session id: $_deviceSessionId"),
+                ],
+              ),
             ),
           ),
         ),
