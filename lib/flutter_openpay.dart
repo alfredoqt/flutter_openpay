@@ -64,10 +64,12 @@ class FlutterOpenpay {
   ///   • `ERROR_UNABLE_TO_GET_SESSION_ID` - An error happened while generating the device session id.
   static Future<String> getDeviceSessionId({
     @required String merchantId,
+    @required String publicApiKey,
     @required bool productionMode,
   }) {
     return _channel.invokeMethod('getDeviceSessionId', <String, dynamic>{
       'merchantId': merchantId,
+      'publicApiKey': publicApiKey,
       'productionMode': productionMode,
     });
   }

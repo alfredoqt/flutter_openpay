@@ -99,7 +99,8 @@ class _MyAppState extends State<MyApp> {
     String deviceSessionId;
     try {
       deviceSessionId = await FlutterOpenpay.getDeviceSessionId(
-        merchantId: 'mop7w9rqjzbkhcmwcoob',
+        merchantId: 'm3ts0hkttkzst0ygk8ha',
+        publicApiKey: 'pk_3a6c4e052213416c84c9f2da10bcb7d2',
         productionMode: false,
       );
       setState(() {
@@ -245,10 +246,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(),
-      title: "Conekta Tokenization Example",
+      title: "Openpay Tokenization Example",
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Conekta Tokenization Example"),
+          title: Text("Openpay Tokenization Example"),
         ),
         body: SingleChildScrollView(
           child: Container(
