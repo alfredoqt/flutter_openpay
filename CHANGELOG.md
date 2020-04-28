@@ -1,3 +1,4 @@
-## 0.0.1
+## 1.0.0
 
-* TODO: Describe initial release.
+* First release of Flutter Openpay plugin
+* Allows for card tokenization and device id collection
