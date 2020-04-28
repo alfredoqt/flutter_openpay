@@ -1,13 +1,13 @@
 name: flutter_openpay
 description: A plugin to use Openpay in flutter.
-version: 0.0.1
-author: 
+version: 1.0.0
+authors: 
   - Alfredo Quintero <alfredoq98@hotmail.com>
   - Emiliano Peredo <peredo98@hotmail.com>
 homepage: https://github.com/alfredoqt/flutter_openpay
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.4.0 <3.0.0"
 
 dependencies:
   flutter:
