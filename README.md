@@ -46,7 +46,7 @@ Will let you tokenize a card. This receives eight required parameters: the `publ
 
 #### `FlutterOpenpay.getDeviceSessionId()`
 
-Will let you generate a unique device session id, which you should use to access resources from the [Openpay API](https://www.openpay.mx/docs/api/). This receives two required parameters: the `productionMode` flag and the `merchantId` from Openpay. Returns a `String` with the device session id.
+Will let you generate a unique device session id, which you should use to access resources from the [Openpay API](https://www.openpay.mx/docs/api/). This receives three required parameters: the `productionMode` flag, the `publicApiKey` to specify your Openpay public key, and the `merchantId` from Openpay. Returns a `String` with the device session id.
 
 ## Currently supported features
 
