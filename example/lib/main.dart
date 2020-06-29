@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
         );
       } catch (e) {
         print(e.toString());
-        token = "Unable to tokenize card";
+        token = e.message;
       }
 
       setState(() {

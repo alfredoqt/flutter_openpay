@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'dart:convert';
+import 'package:http/http.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -44,17 +46,36 @@ class FlutterOpenpay {
     @required String cvv,
     @required String expiryMonth,
     @required String expiryYear,
-  }) {
-    return _channel.invokeMethod('tokenizeCard', <String, dynamic>{
-      'merchantId': merchantId,
-      'publicApiKey': publicApiKey,
-      'productionMode': productionMode,
-      'cardholderName': cardholderName,
-      'cardNumber': cardNumber,
-      'cvv': cvv,
-      'expiryMonth': expiryMonth,
-      'expiryYear': expiryYear,
-    });
+  }) async{
+    String baseUrl = productionMode ? 'https://api.openpay.mx' : 'https://sandbox-api.openpay.mx';
+
+    String _merchantBaseUrl = '$baseUrl/v1/$merchantId';
+
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$publicApiKey:'));
+
+    Response response = await post('$_merchantBaseUrl/tokens', headers: {
+      'Content-type': 'application/json',
+      'Authorization': basicAuth,
+      'Accept': 'application/json',
+    }, body: """{
+      "card_number": "${cardNumber}",
+      "holder_name": "${cardholderName}",
+      "expiration_year": "${expiryYear}",
+      "expiration_month": "${expiryMonth}",
+      "cvv2": "${cvv}"
+    }""");
+
+    Map<String, dynamic> responseJson = json.decode(response.body);
+    if (response.statusCode == 201) {
+      String cardToken = responseJson["id"];
+      return cardToken;
+    } else {
+      if(responseJson["error_code"] != null){
+        throw Exception('Error ${responseJson["error_code"]}: ${responseJson["description"]}');
+      }else{
+        throw Exception('${response.body}');
+      }
+    }
   }
 
   /// Generates a device session id
