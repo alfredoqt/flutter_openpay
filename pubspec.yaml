@@ -1,6 +1,6 @@
 name: flutter_openpay
 description: A plugin to use Openpay in flutter, this plugin is only for getting deviceId and cardToken with their respective methods.
-version: 1.0.1
+version: 1.0.2
 authors: 
   - Alfredo Quintero <alfredoq98@hotmail.com>
   - Emiliano Peredo <peredo98@hotmail.com>
@@ -11,7 +11,7 @@ environment:
 
 dependencies:
 
-  http: ^0.12.0+4
+  http: ^0.13.3
 
   flutter:
     sdk: flutter
